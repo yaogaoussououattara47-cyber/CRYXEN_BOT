@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryxen Cyber Hack Squad</title>
+<meta property="og:title" content="Cryxen Cyber Hack Squad">
+<meta property="og:description" content="Bot WhatsApp officiel du groupe. Télécharge la dernière version.">
+<meta property="og:image" content="https://yaogaoussououattara47-cyber.github.io/CRYXEN_BOT/logo.jpg">
+<meta property="og:url" content="https://yaogaoussououattara47-cyber.github.io/CRYXEN_BOT/">
+<meta property="og:type" content="website">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+ <style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+  }
+
+  .grid-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 8s linear infinite;
+    z-index: 0;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+  }
+
+  .glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    z-index: 0;
+  }
+  .glow1 {
+    width: 300px; height: 300px;
+    background: #00c6ff;
+    top: -50px; left: -50px;
+    animation: float1 12s ease-in-out infinite;
+  }
+  .glow2 {
+    width: 250px; height: 250px;
+    background: #0072ff;
+    bottom: -50px; right: -50px;
+    animation: float2 14s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(60px, 80px); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-60px, -80px); }
+  }
+
+  .particle {
+    position: fixed;
+    bottom: -10px;
+    width: 4px;
+    height: 4px;
+    background: #29c5ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #29c5ff, 0 0 16px #29c5ff;
+    animation: rise linear infinite;
+    z-index: 0;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+  }
+
+  .card {
+    background: rgba(0, 200, 255, 0.05);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 16px;
+    padding: 30px 24px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.15);
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(4px);
+    overflow: hidden;
+  }
+
+  .logo-wrapper {
+    width: calc(100% + 48px);
+    margin: -30px -24px 20px -24px;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+  }
+  .logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  h1 {
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: #29c5ff;
+    text-shadow: 0 0 10px rgba(41, 197, 255, 0.6);
+  }
+  .subtitle {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #29c5ff;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+  p.desc {
+    color: #aaa;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  a.download {
+    display: inline-block;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    width: 100%;
+    font-size: 15px;
+  }
+  a.creator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid #25D366;
+    color: #25D366;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  a.creator:hover {
+    background: rgba(37, 211, 102, 0.1);
+  }
+  a.channel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0, 200, 255, 0.1);
+    border: 1px solid #29c5ff;
+    color: #29c5ff;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  a.channel:hover {
+    background: rgba(41, 197, 255, 0.2);
+  }
+  a.deploy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0, 200, 255, 0.1);
+    border: 1px solid #29c5ff;
+    color: #29c5ff;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  a.deploy:hover {
+    background: rgba(41, 197, 255, 0.2);
+  }
+  .footer {
+    margin-top: 20px;
+    font-size: 11px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+
+  <div class="grid-bg"></div>
+  <div class="glow glow1"></div>
+  <div class="glow glow2"></div>
+
+  <div class="card">
+    <div class="logo-wrapper">
+      <img src="logo.jpg" alt="Cryxen" class="logo">
+    </div>
+    <h1>CRYXEN</h1>
+    <div class="subtitle">CYBER HACK SQUAD</div>
+    <p class="desc">Bot WhatsApp officiel du groupe. Télécharge la dernière version ci-dessous.</p>
+    <a class="download" href="Cryxen_bot.zip">⬇ Télécharger le ZIP</a>
+    <a class="creator" href="https://wa.me/2250575514932" target="_blank">💬 Contacter le créateur</a>
+    <a class="channel" href="https://whatsapp.com/channel/0029VbDUrKRLCoWuL1ULWA0k/171" target="_blank">📢 Comment déployer le bot</a>
+    <a class="deploy" href="termux.html">🛠️ Déployer sur Termux</a>
+    <div class="footer">Usage réservé aux membres du groupe</div>
+  </div>
+
+  <script>
+    const particleCount = 25;
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (8 + Math.random() * 10) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      document.body.appendChild(p);
+    }
+  </script>
+</body>
+</html>
