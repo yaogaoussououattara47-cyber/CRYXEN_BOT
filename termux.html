@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRYXEN_BOT — Guide de déploiement Termux</title>
+<meta property="og:title" content="CRYXEN_BOT — Guide de déploiement Termux">
+<meta property="og:description" content="Installation complète du bot WhatsApp sur Termux.">
+<meta property="og:image" content="https://yaogaoussououattara47-cyber.github.io/CRYXEN_BOT/logo.jpg">
+<meta property="og:url" content="https://yaogaoussououattara47-cyber.github.io/CRYXEN_BOT/termux.html">
+<meta property="og:type" content="website">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow-x: hidden; }
+
+  body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: #07070B;
+    color: #F4F7F5;
+    min-height: 100vh;
+    padding: 60px 24px;
+    position: relative;
+  }
+
+  /* ── Fond ── */
+  .grid-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(26,143,108,0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,143,108,0.10) 1px, transparent 1px);
+    background-size: 34px 34px;
+    z-index: 0;
+  }
+  .glow {
+    position: fixed;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 1300px; height: 700px;
+    background: radial-gradient(circle, rgba(28,255,158,0.18) 0%, rgba(28,255,158,0) 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hex {
+    position: fixed;
+    stroke: #2BD68F;
+    fill: none;
+    stroke-width: 1.5;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hex-top { top: 30px; right: 30px; opacity: 0.5; width: 180px; }
+  .hex-bottom { bottom: 40px; left: 20px; opacity: 0.35; width: 110px; }
+
+  /* ── Contenu ── */
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .back-link {
+    color: #2BD68F;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.85;
+    border: 1px solid rgba(43,214,143,0.35);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  .back-link:hover { opacity: 1; background: rgba(43,214,143,0.08); }
+
+  .eyebrow {
+    color: #2BD68F;
+    font-size: 15px;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(38px, 7vw, 64px);
+    font-weight: 700;
+    color: #F4F7F5;
+    line-height: 1.1;
+  }
+  h1 span { color: #2BD68F; }
+
+  .subtitle {
+    font-size: clamp(16px, 2.4vw, 22px);
+    color: #8FA79C;
+    margin-top: 14px;
+  }
+
+  .accent-line {
+    width: 150px;
+    height: 4px;
+    margin-top: 22px;
+    background: linear-gradient(90deg, #39FF9C, #00C2FF);
+  }
+
+  /* ── Terminal ── */
+  .terminal {
+    margin-top: 40px;
+    background: #0B0E12;
+    border: 1px solid #1F2A24;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+    overflow: hidden;
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    background: #12161B;
+    position: relative;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+  .dot.red { background: #FF5F57; }
+  .dot.yellow { background: #FEBC2E; }
+  .dot.green { background: #28C840; }
+  .terminal-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #5D6B65;
+    font-size: 13px;
+  }
+
+  .terminal-body {
+    padding: 26px 24px 18px;
+  }
+  .step-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2BD68F;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 24px 0 8px;
+  }
+  .step-label:first-child { margin-top: 0; }
+  .step-num {
+    font-size: 15px;
+  }
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+  }
+  .cmd-row:last-of-type { border-bottom: none; }
+  .cmd-text {
+    font-size: clamp(13px, 1.9vw, 17px);
+    color: #2BD68F;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .cmd-text.accent { color: #00C2FF; }
+  .copy-btn {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(43,214,143,0.08);
+    border: 1px solid rgba(43,214,143,0.3);
+    color: #2BD68F;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .copy-btn:hover { background: rgba(43,214,143,0.18); }
+  .copy-btn.copied {
+    background: #2BD68F;
+    color: #06110C;
+    border-color: #2BD68F;
+  }
+
+  .status-line {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: #5D6B65;
+    font-size: 13.5px;
+  }
+
+  /* ── Bas de page ── */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .btn {
+    flex: 1 1 220px;
+    text-align: center;
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 14px 20px;
+    border-radius: 30px;
+  }
+  .btn.primary {
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    color: #fff;
+  }
+  .btn.secondary {
+    background: rgba(43,214,143,0.1);
+    border: 1px solid #2BD68F;
+    color: #2BD68F;
+  }
+  .btn.secondary:hover { background: rgba(43,214,143,0.2); }
+
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 48px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #4E5C57;
+  }
+  .footer-row .tag { color: #2BD68F; }
+</style>
+</head>
+<body>
+
+  <div class="grid-bg"></div>
+  <div class="glow"></div>
+
+  <svg class="hex hex-top" viewBox="0 0 200 160">
+    <polygon points="80,10 120,32 120,76 80,98 40,76 40,32"/>
+    <polygon points="140,60 170,77 170,111 140,128 110,111 110,77"/>
+  </svg>
+  <svg class="hex hex-bottom" viewBox="0 0 120 120">
+    <polygon points="60,10 100,32 100,76 60,98 20,76 20,32"/>
+  </svg>
+
+  <div class="wrap">
+    <div class="top-row">
+      <a class="back-link" href="index.html">← Retour à l'accueil</a>
+    </div>
+
+    <div class="eyebrow">GUIDE DE DÉPLOIEMENT</div>
+    <h1>CRYXEN<span>_BOT</span></h1>
+    <div class="subtitle">Installation complète sur Termux</div>
+    <div class="accent-line"></div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="terminal-title">termux — bot-whatsapp</div>
+      </div>
+
+      <div class="terminal-body">
+
+        <div class="step-label"><span class="step-num">1️⃣</span> Mise à jour Termux et outils de base</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ pkg update &amp;&amp; pkg upgrade -y</span>
+          <button class="copy-btn" data-cmd="pkg update && pkg upgrade -y">📋 Copier</button>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ pkg install git unzip wget -y</span>
+          <button class="copy-btn" data-cmd="pkg install git unzip wget -y">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">2️⃣</span> Dépendances supplémentaires</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ pkg install python make clang ffmpeg libvips -y</span>
+          <button class="copy-btn" data-cmd="pkg install python make clang ffmpeg libvips -y">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">3️⃣</span> Accès au stockage interne</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ termux-setup-storage</span>
+          <button class="copy-btn" data-cmd="termux-setup-storage">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">4️⃣</span> Installer les paquets nécessaires</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ pkg install nodejs git -y</span>
+          <button class="copy-btn" data-cmd="pkg install nodejs git -y">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">5️⃣</span> Vérifie que tu vois le fichier du bot</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ ls ~/storage/downloads</span>
+          <button class="copy-btn" data-cmd="ls ~/storage/downloads">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">6️⃣</span> Copie et extraction du bot</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ mkdir ~/bot-whatsapp</span>
+          <button class="copy-btn" data-cmd="mkdir ~/bot-whatsapp">📋 Copier</button>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ cp ~/storage/downloads/Cryxen_bot.zip ~/bot-whatsapp/</span>
+          <button class="copy-btn" data-cmd="cp ~/storage/downloads/Cryxen_bot.zip ~/bot-whatsapp/">📋 Copier</button>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ cd ~/bot-whatsapp</span>
+          <button class="copy-btn" data-cmd="cd ~/bot-whatsapp">📋 Copier</button>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ unzip Cryxen_bot.zip</span>
+          <button class="copy-btn" data-cmd="unzip Cryxen_bot.zip">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">7️⃣</span> Installation des modules</div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ cd Cryxen_bot</span>
+          <button class="copy-btn" data-cmd="cd Cryxen_bot">📋 Copier</button>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-text">$ npm install ytdl-core</span>
+          <button class="copy-btn" data-cmd="npm install ytdl-core">📋 Copier</button>
+        </div>
+
+        <div class="step-label"><span class="step-num">8️⃣</span> Lancement du bot</div>
+        <div class="cmd-row">
+          <span class="cmd-text accent">$ node index.js</span>
+          <button class="copy-btn" data-cmd="node index.js">📋 Copier</button>
+        </div>
+
+        <div class="status-line">𖤐 Ton CRYXEN_BOT est prêt — scanne le QR code pour connecter WhatsApp 𖤐</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn primary" href="Cryxen_bot.zip">⬇ Télécharger le ZIP</a>
+      <a class="btn secondary" href="https://whatsapp.com/channel/0029VbDUrKRLCoWuL1ULWA0k/171" target="_blank">📢 Rejoindre la chaîne CRYXEN</a>
+    </div>
+
+    <div class="footer-row">
+      <span class="tag">CRYXEN²¹⁰⁹ · LE SYSTÈME NE DORT JAMAIS</span>
+      <span class="tag">100% open · à toi de le modifier</span>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const cmd = btn.getAttribute('data-cmd');
+        try {
+          await navigator.clipboard.writeText(cmd);
+        } catch (e) {
+          // Repli si l'API clipboard est indisponible (contexte non sécurisé)
+          const ta = document.createElement('textarea');
+          ta.value = cmd;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        const original = btn.textContent;
+        btn.textContent = '✔ Copié';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
