@@ -235,6 +235,34 @@
     color: #4E5C57;
   }
   .footer-row .tag { color: #2BD68F; }
+
+  /* ── Vidéo de déploiement ── */
+  .video-section {
+    margin-top: 44px;
+  }
+  .video-wrapper {
+    margin-top: 16px;
+    border: 1px solid #1F2A24;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+    background: #0B0E12;
+  }
+  .video-wrapper video {
+    display: block;
+    width: 100%;
+    max-height: 560px;
+    background: #000;
+  }
+  .view-count {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8FA79C;
+    font-size: 14px;
+  }
+  .view-count span { color: #2BD68F; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -338,8 +366,19 @@
           <button class="copy-btn" data-cmd="node index.js">📋 Copier</button>
         </div>
 
-        <div class="status-line">𖤐 Ton CRYXEN_BOT est prêt — suis les instructions affichées dans le terminal pour connecter WhatsApp 𖤐/div>
+        <div class="status-line">𖤐 Ton CRYXEN_BOT est prêt — suis les instructions affichées dans le terminal pour connecter WhatsApp 𖤐</div>
       </div>
+    </div>
+
+    <div class="video-section">
+      <div class="eyebrow">🎬 VIDÉO DE DÉPLOIEMENT</div>
+      <div class="video-wrapper">
+        <video id="deployVideo" controls preload="metadata" poster="assets/video-poster.jpg">
+          <source src="assets/deploy-video.mp4" type="video/mp4">
+          Ton navigateur ne supporte pas la lecture vidéo.
+        </video>
+      </div>
+      <div class="view-count">👁️ <span id="viewCount">…</span> vues</div>
     </div>
 
     <div class="actions">
@@ -352,6 +391,43 @@
       <span class="tag">100% open · à toi de le modifier</span>
     </div>
   </div>
+
+  <script>
+    // ── Compteur de vues (CountAPI, gratuit, sans clé) ──
+    // Un même compteur "namespace/key" = un compteur unique partagé par tous les visiteurs
+    const VIEW_NAMESPACE = 'cryxen-bot';
+    const VIEW_KEY = 'termux-video-views';
+    const viewCountEl = document.getElementById('viewCount');
+    let alreadyCounted = false;
+
+    async function loadViewCount() {
+      try {
+        const res = await fetch(`https://api.countapi.xyz/get/${VIEW_NAMESPACE}/${VIEW_KEY}`);
+        const data = await res.json();
+        viewCountEl.textContent = data.value ?? 0;
+      } catch (e) {
+        viewCountEl.textContent = '—';
+      }
+    }
+
+    async function registerView() {
+      if (alreadyCounted) return;
+      alreadyCounted = true;
+      try {
+        const res = await fetch(`https://api.countapi.xyz/hit/${VIEW_NAMESPACE}/${VIEW_KEY}`);
+        const data = await res.json();
+        viewCountEl.textContent = data.value;
+      } catch (e) {}
+    }
+
+    loadViewCount();
+
+    const deployVideo = document.getElementById('deployVideo');
+    if (deployVideo) {
+      // On ne compte une vue que si la personne appuie vraiment sur lecture
+      deployVideo.addEventListener('play', registerView);
+    }
+  </script>
 
   <script>
     document.querySelectorAll('.copy-btn').forEach(btn => {
